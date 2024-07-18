@@ -1,10 +1,10 @@
 import React, { useState } from 'react'
-import { Link, useLocation } from 'react-router-dom'
+import { Link, useLocation, useNavigate } from 'react-router-dom'
 
-import { BsArrowLeftCircle } from 'react-icons/bs'
-import { AiFillPieChart } from 'react-icons/ai'
-import { SiFuturelearn } from 'react-icons/si'
-import { SiOpenaccess } from 'react-icons/si'
+// import { BsArrowLeftCircle } from 'react-icons/bs'
+// import { AiFillPieChart } from 'react-icons/ai'
+// import { SiFuturelearn } from 'react-icons/si'
+// import { SiOpenaccess } from 'react-icons/si'
 import { CgProfile } from 'react-icons/cg'
 import Logo from '../assets/images/logo.png'
 import HamburgerButton from './HamburgerMenuButton/HamburgerButton'
@@ -14,28 +14,35 @@ import { FiUsers } from "react-icons/fi";
 import { AiOutlineUser } from "react-icons/ai";
 import { BiUserPlus } from "react-icons/bi";
 import { IoMdLogOut } from "react-icons/io";
-
+import { MdOutlinePrivacyTip } from "react-icons/md";
+import { IoMdCheckboxOutline } from "react-icons/io";
+import { clearLocalStorage } from '../common/commonFunction'
 const Sidebar = () => {
-  const [open, setOpen] = useState(true)
+  const [open] = useState(true)
   const [mobileMenu, setMobileMenu] = useState(false)
-  const location = useLocation()
+  const location = useLocation();
+  const navigate = useNavigate()
 
   const Menus = [
     { title: 'Dashboard', path: '/dashboard', src: <IoHomeOutline /> },
-    { title: 'My Profile', path: '/myProfile', src: <CgProfile /> },
-    { title: 'All Admins', path: '/allAdmins', src: <FiUsers />},
+    { title: 'All Admins', path: '/allAdmins', src: <FiUsers /> },
     { title: 'All Users', path: '/allUsers', src: <AiOutlineUser /> },
     { title: 'Create User', path: '/createUser', src: <FaUserEdit /> },
-    { title: 'Create Admin', path: '/createAdmin', src: <BiUserPlus />},
-    { title: 'Log Out', path: '/logOut', src: <IoMdLogOut /> },
+    { title: 'Create Admin', path: '/createAdmin', src: <BiUserPlus /> },
+    { title: 'Privacy', path: '/createAdmin', src: <MdOutlinePrivacyTip /> },
+    { title: 'Term & Conditions', path: '/createAdmin', src: <IoMdCheckboxOutline /> },
   ]
+
+  const handleLogout = () => {
+    clearLocalStorage();
+    navigate('/login')
+  }
 
   return (
     <>
       <div
-        className={`${
-          open ? 'w-60' : 'w-fit'
-        } hidden sm:block relative h-screen duration-300 bg-gray-100 border-r border-gray-200 dark:border-gray-600 p-5 dark:bg-slate-800`}
+        className={`${open ? 'w-60' : 'w-20'
+          } hidden sm:block relative h-full duration-300 bg-gray-100 border-r border-gray-200 dark:border-gray-600 p-5 dark:bg-slate-800`}
       >
         {/* <BsArrowLeftCircle
           className={`${
@@ -45,12 +52,11 @@ const Sidebar = () => {
         /> */}
         <Link to='/'>
           <div className={`flex flex-col mx-auto ${open && 'gap-x-4'} items-center`}>
-           {open && (
+            {open && (
               <div>
-                 <img className='pl-0 rounded-full h-[7rem] w-[7rem] flex mx-auto' src={Logo} alt=''  />
-                  <span className='text-2xl font-medium whitespace-nowrap dark:text-white'>Arvind Kumar</span>
+                <img className='pl-0 rounded-full h-[7rem] w-[7rem] flex mx-auto' src={Logo} alt='' />
+                <span className='text-2xl font-medium whitespace-nowrap dark:text-white'>SPIR  Health</span>
               </div>
-             
             )}
           </div>
         </Link>
@@ -60,22 +66,23 @@ const Sidebar = () => {
             <Link to={menu.path} key={index}>
               <li
                 className={`flex items-center gap-x-6 p-3 text-base font-normal rounded-lg cursor-pointer dark:text-white hover:bg-gray-200 dark:hover:bg-gray-700
-                        ${menu.gap ? 'mt-9' : 'mt-2'} ${
-                  location.pathname === menu.path &&
+                        ${menu.gap ? 'mt-9' : 'mt-2'} ${location.pathname === menu.path &&
                   'bg-gray-200 dark:bg-gray-700'
-                }`}
+                  }`}
               >
                 <span className='text-2xl '>{menu.src}</span>
                 <span
-                  className={`${
-                    !open && 'hidden'
-                  } origin-left duration-300 hover:block  w-[100px]`}
+                  className={`${!open && 'hidden'
+                    } origin-left duration-300 hover:block  w-[100px]`}
                 >
                   {menu.title}
                 </span>
               </li>
             </Link>
           ))}
+          <li className='flex items-center gap-x-6 p-3 text-base font-normal rounded-lg cursor-pointer dark:text-white hover:bg-gray-200 dark:hover:bg-gray-700' onClick={() => handleLogout()}>
+            LogOut
+          </li>
         </ul>
       </div>
       {/* Mobile Menu */}
@@ -87,9 +94,8 @@ const Sidebar = () => {
       </div>
       <div className="sm:hidden">
         <div
-          className={`${
-            mobileMenu ? 'flex' : 'hidden'
-          } absolute z-50 flex-col items-center self-end py-8 mt-16 space-y-6 font-bold sm:w-auto left-6 right-6 dark:text-white  bg-gray-50 dark:bg-slate-800 drop-shadow md rounded-xl`}
+          className={`${mobileMenu ? 'flex' : 'hidden'
+            } absolute z-50 flex-col items-center self-end py-8 mt-16 space-y-6 font-bold sm:w-auto left-6 right-6 dark:text-white  bg-gray-50 dark:bg-slate-800 drop-shadow md rounded-xl`}
         >
           {Menus.map((menu, index) => (
             <Link
@@ -98,10 +104,9 @@ const Sidebar = () => {
               onClick={() => setMobileMenu(false)}
             >
               <span
-                className={` ${
-                  location.pathname === menu.path &&
+                className={` ${location.pathname === menu.path &&
                   'bg-gray-200 dark:bg-gray-700'
-                } p-2 rounded-xl hover:bg-gray-200 dark:hover:bg-gray-700`}
+                  } p-2 rounded-xl hover:bg-gray-200 dark:hover:bg-gray-700`}
               >
                 {menu.title}
               </span>

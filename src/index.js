@@ -1,5 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
+import { Provider } from 'react-redux';
+import store from './user/Store';
 import './index.css';
 import App from './App';
 import { ThemeProvider } from './components/ThemeContext'
@@ -11,7 +13,9 @@ root.render(
     <React.StrictMode>
         <ThemeProvider>
             <Background>
+            <Provider store={store}>
                 <App />
+                </Provider>
             </Background>
         </ThemeProvider>
     </React.StrictMode>

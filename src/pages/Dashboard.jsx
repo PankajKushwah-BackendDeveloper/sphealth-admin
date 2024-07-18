@@ -1,79 +1,145 @@
-import React, { useEffect, useState } from "react";
-import axios from "axios";
-import { useNavigate } from "react-router-dom";
+
+
+import React, { useEffect, useRef } from "react";
+import Chart from 'chart.js/auto';
+import BarChat from '../pages/BarChat'; // Corrected import name
+
+import { HiTrendingUp, HiTrendingDown } from 'react-icons/hi';
 
 function Dashboard() {
-  const [totalUsers, setTotalUsers] = useState(0); 
-  const navigate = useNavigate();
+  const chartRef = useRef(null);
+  const chartInstance = useRef(null);
 
   useEffect(() => {
-    const fetchUsers = async () => {
-      const token = localStorage.getItem("authToken");
-      if (!token) {
-        navigate("/login");
-        return;
-      }
+    const myChartRef = chartRef.current.getContext('2d');
 
-      const options = {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      };
-      try {
-        const response = await axios.get(
-          "http://157.173.222.27:8080/api/v1/user/get-all",
-          options
-        );
-        setTotalUsers(response.data.totalUsers); 
-        console.log(response);
-       
-      } catch (error) {
-        console.error("Error fetching users:", error);
+    chartInstance.current = new Chart(myChartRef, {
+      type: "doughnut",
+      data: {
+        labels: ["Midday: 34%", "Morning: 47%", "Unwind: 19%"],
+        datasets: [
+          {
+            data: [25, 20, 15],
+            backgroundColor: [
+              'rgb(192, 57, 43)',
+              'rgb(13, 71, 161)',
+              'rgb(241, 196, 15)'
+            ],
+          }
+        ]
+      }
+    });
+
+    return () => {
+      if (chartInstance.current) {
+        chartInstance.current.destroy();
       }
     };
+  }, []);
 
-    fetchUsers();
-  }, [navigate]);
+  // Function to dynamically adjust chart size based on screen width
+  // const getChartSize = () => {
+  //   const screenWidth = window.innerWidth;
+  //   if (screenWidth > 768) {
+  //     return 350; // Default size for larger screens
+  //   } else {
+  //     return screenWidth - 60; // Adjust size for smaller screens
+  //   }
+  // };
 
   return (
-    <div className="flex flex-row flex-wrap">
     
-        <div className="m-5" >
-          <div className="max-w-sm p-6 bg-gradient-to-b from-sky-800 to-sky-500 shadow-[10px_10px_30px_-5px_rgba(7,89,133,0.7)] shadow-sky-800 border-gray-200 rounded-lg dark:bg-gray-800 dark:border-gray-700">
-            <a href="/">
-              <h5 className="mb-2 text-2xl font-semibold tracking-tight text-sky-200 dark:text-white">
-                Users
-              </h5>
-            </a>
-            <p className="mb-3 font-normal text-white dark:text-gray-400">
-              {totalUsers} 
-            </p>
-            <a
-              href="/"
-              className="inline-flex font-medium items-center text-gray-200 hover:underline"
-            >
-              See our guideline
-              <svg
-                className="w-3 h-3 ms-2.5 rtl:rotate-[270deg]"
-                aria-hidden="true"
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 18 18"
-              >
-                <path
-                  stroke="currentColor"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  d="M15 11v4.833A1.166 1.166 0 0 1 13.833 17H2.167A1.167 1.167 0 0 1 1 15.833V4.167A1.166 1.166 0 0 1 2.167 3h4.618m4.447-2H17v5.768M9.111 8.889l7.778-7.778"
-                />
-              </svg>
-            </a>
+    <div className="bg-gray-100 lg:h-full  w-full   dark:bg-slate-900">
+    <h1>dashboard</h1>
+      <main className="h-full">
+        <section className="flex flex-col mt-5 ml-2 mr-10 lg:ml-2 lg:mr-2 lg:grid grid-cols-1 lg:grid-cols-4 gap-4 lg:gap-8 lg:p-10 lg:mt-5">
+          <WidgetItem
+            percent={10}
+            amount={false}
+            value={7}
+            heading="Users"
+            color="rgb(0,115,255)"
+          />
+          <WidgetItem
+            percent={20}
+            amount={false}
+            value={1}
+            heading="Admin"
+            color="rgb(255,89,83)"
+          />
+          <WidgetItem
+            percent={0}
+            amount={false}
+            value={0}
+            heading="Revenue"
+            color="rgb(16,185,129)"
+          />
+          <WidgetItem
+            percent={0}
+            amount={false}
+            value={0}
+            heading="Expenses"
+            color="rgb(255,193,7)"
+          />
+
+          {/* BarChart component */}
+          <div className="mt-10 col-span-4 lg:col-span-2">
+            <BarChat />
           </div>
-        </div>
-     
+
+          {/* Chart.js Pie Chart */}
+          <div className="col-span-4 lg:col-span-2">
+            <div className="h-[550px] w-[300px] ml-[10px] mr-auto mt-5 lg:mt-[20px] lg:h-[350px] lg:w-[350px] lg:ml-[200px]">
+              <canvas ref={chartRef} />
+            </div>
+          </div>
+        </section>
+      </main>
     </div>
   );
 }
+
+// WidgetItem component definition (assuming it remains unchanged)
+interface WidgetItemProps {
+  heading: string;
+  value: number;
+  percent: number;
+  color: string;
+  amount: boolean;
+}
+
+const WidgetItem = ({
+  heading,
+  value,
+  percent,
+  color,
+  amount,
+}: WidgetItemProps) => (
+  <article className="flex h-[80px] mr-[10px] w-[240px] lg:h-[100px] lg:mb-5 lg:flex lg:flex-row lg:p-4 lg:rounded lg:shadow bg-white">
+    <div className="ml-8 mt-2 lg:ml-4">
+      <p className="text-xs font-semibold text-gray-500 lg:text-sm">{heading}</p>
+      <h4 className="font-bold text-2xl lg:text-1xl" style={{ color }}>
+        {amount ? `$${value.toLocaleString()}` : value}
+      </h4>
+      <div className={`flex items-center lg:flex lg:items-center lg:text-sm ${percent > 0 ? 'text-green-500' : 'text-red-500'}`}>
+        {percent > 0 ? (
+          <HiTrendingUp className="mr-1" />
+        ) : (
+          <HiTrendingDown className="mr-1" />
+        )}
+        {Math.abs(percent)}%
+      </div>
+    </div>
+    <div className="flex ml-10 mt-8 lg:mt-0 lg:ml-10 lg:items-center lg:justify-center bg-blue-300 rounded-full" style={{
+      background: `conic-gradient(
+        from 0deg,
+        ${color} ${Math.abs(percent) / 100 * 360}deg,
+        rgba(255, 255, 255, 0) 0deg
+      )`
+    }}>
+      <span className="text-black">{percent}%</span>
+    </div>
+  </article>
+);
 
 export default Dashboard;
