@@ -51,6 +51,7 @@ const AllUsers = () => {
               <th scope="col" className="px-4 py-2 sm:px-6 sm:py-3">Email</th>
               <th scope="col" className="px-4 py-2 sm:px-6 sm:py-3">Mobile no</th>
               <th scope="col" className="px-1 w-80 py-2 sm:px-1 sm:py-3">Total Check-ins</th>
+              <th scope="col" className="px-1 w-80 py-2 sm:px-1 sm:py-3">UID</th>
               <th scope="col" className="px-4 py-2 sm:px-6 sm:py-3">Purpose</th>
               <th scope="col" className="px-4 w-96 py-2 sm:px-6 sm:py-3">Stage & Level</th>
               <th scope="col" className="px-4 py-2 sm:px-6 sm:py-3">Action</th>
@@ -65,6 +66,7 @@ const AllUsers = () => {
                 <td className="px-4 py-2 sm:px-6 sm:py-2">{data.email}</td>
                 <td className="px-4 py-2 sm:px-6 sm:py-2">{data.phone}</td>
                 <td className="px-4 py-2 sm:px-6 sm:py-2">{data.checkIns}</td>
+                <td className="px-4 py-2 sm:px-6 sm:py-2">{data.username}</td>
                 <td className="px-4 py-2 sm:px-6 sm:py-2">{data.purpose}</td>
                 <td className="px-4 py-2 sm:px-6 sm:py-2">{data.level}</td>
                 <td className="px-4 py-2 sm:px-6 sm:py-2 flex">
