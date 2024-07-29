@@ -78,7 +78,7 @@ const AllAdmins = () => {
             <tr>
               <th scope="col" className="px-4 py-2 sm:px-6 sm:py-3">Full Name</th>
               <th scope="col" className="px-4 py-2 sm:px-6 sm:py-3">Email</th>
-              <th scope="col" className="px-4 py-2 sm:px-6 sm:py-3">Action</th>
+              {/* <th scope="col" className="px-4 py-2 sm:px-6 sm:py-3">Action</th> */}
             </tr>
           </thead>
           <tbody>
@@ -88,7 +88,7 @@ const AllAdmins = () => {
                   {data.name}
                 </td>
                 <td className="px-4 py-2 sm:px-6 sm:py-2">{data.email}</td>
-                <td className="px-4 py-2 sm:px-6 sm:py-2 flex">
+                {/* <td className="px-4 py-2 sm:px-6 sm:py-2 flex">
                   <button
                     type="button"
                     className="hover:-translate-y-1 hover:scale-110 hover:text-blue-800 duration-300 text-blue-800 mx-2 text-lg"
@@ -102,8 +102,8 @@ const AllAdmins = () => {
                     onClick={() => handleDeleteClick(data._id)}
                   >
                     <MdOutlineDeleteForever />
-                  </button>
-                </td>
+                  </button> 
+                 </td> */}
               </tr>
             ))}
           </tbody>
